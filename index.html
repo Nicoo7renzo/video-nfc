@@ -3,89 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#000000">
   <title>Il mio video</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       background: #000;
       color: white;
-      font-family: system-ui, sans-serif;
-    }
-
-    main {
-      width: 100%;
-      max-width: 900px;
-      padding: 16px;
-      text-align: center;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
     }
 
     video {
-      display: block;
       width: 100%;
       max-height: 85vh;
-      border-radius: 12px;
-      background: #000;
     }
 
     button {
-      margin-top: 16px;
-      padding: 16px 28px;
-      border: 0;
-      border-radius: 999px;
-      background: white;
-      color: black;
+      margin: 20px;
+      padding: 16px 24px;
       font-size: 18px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    #playButton {
-      display: none;
+      border: 0;
+      border-radius: 12px;
     }
   </style>
 </head>
 <body>
-  <main>
-    <video id="video" controls playsinline preload="auto">
-      <source src="https://res.cloudinary.com/fsodla0e/video/upload/v1793093620/1000184474.mp4" type="video/mp4">
-      Il tuo browser non supporta la riproduzione video.
-    </video>
-    <button id="playButton" type="button">▶ Guarda il video</button>
-  </main>
+  <video id="video" autoplay muted playsinline controls>
+    <source src="https://res.cloudinary.com/fsodla0e/video/upload/v1793093620/1000184474.mp4" type="video/mp4">
+    Il tuo browser non supporta il video.
+  </video>
+
+  <button id="audio">🔊 Attiva audio</button>
 
   <script>
     const video = document.getElementById("video");
-    const playButton = document.getElementById("playButton");
+    const button = document.getElementById("audio");
 
-    video.muted = true;
+    video.play().catch(() => {});
 
-    video.play().then(() => {
+    button.addEventListener("click", async () => {
       video.muted = false;
-    }).catch(() => {
-      playButton.style.display = "inline-block";
-    });
 
-    playButton.addEventListener("click", async () => {
-      video.muted = false;
       try {
         await video.play();
-        playButton.style.display = "none";
+        button.hidden = true;
       } catch {
-        playButton.textContent = "Tocca Play sul video";
+        video.muted = true;
+        alert("Il browser non ha consentito la riproduzione con audio.");
       }
-    });
-
-    video.addEventListener("play", () => {
-      playButton.style.display = "none";
     });
   </script>
 </body>
